@@ -9,7 +9,7 @@ use App\Models\User\Asset as UserAsset;
 use App\Models\User\User;
 use App\Models\User\Wallet;
 use App\Models\User\WalletRepository;
-use App\Relayer;
+use App\Models\Mining\Relayer;
 
 class ContractDTO
 {

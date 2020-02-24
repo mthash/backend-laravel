@@ -2,7 +2,7 @@
 
 namespace App\Models\User;
 
-use App\Jwt;
+use App\Exceptions\BusinessLogicException;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,12 +10,13 @@ use App\Models\User\Wallet;
 use App\Models\Historical\HistoryDailyRevenue;
 use App\Exceptions\TokenException;
 use App\Models\Mining\Contract;
+use App\Models\Mining\Relayer;
 
 class User extends Authenticatable
 {
     use Notifiable;
 
-    const   DEMO_USER_ID    = 2;
+    const   DEMO_USER_ID = 2;
 
     protected $dateFormat = 'U';
 
@@ -32,7 +33,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'login', 'password', 'is_demo', 'is_admin', 'tag'
+        'name',
+        'login',
+        'password',
+        'is_demo',
+        'is_admin',
+        'tag',
     ];
 
     /**
@@ -41,7 +47,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -58,57 +65,66 @@ class User extends Authenticatable
     {
         $token = request()->header(Jwt::HEADER);
 
-        if (empty ($token)) throw new TokenException('Authorization Token is empty');
+        if (empty ($token)) {
+            throw new TokenException('Authorization Token is empty');
+        }
 
-        $tokenData  = Jwt::fetch ($token);
+        $tokenData = Jwt::fetch($token);
 
         return self::findOrFail($tokenData['id']);
     }
 
     //TODO: Adjust to Laravel
-//    public function getWallet (?string $symbol = null) : Wallet
-//    {
-//        if (empty ($symbol)) $symbol = 'HASH';
-//        return Wallet::failFindFirst(['status > 0 and currency = ?0 and user_id = ?1', 'bind' => [$symbol, $this->id]]);
-//    }
+    //    public function getWallet (?string $symbol = null) : Wallet
+    //    {
+    //        if (empty ($symbol)) $symbol = 'HASH';
+    //        return Wallet::failFindFirst(['status > 0 and currency = ?0 and user_id = ?1', 'bind' => [$symbol, $this->id]]);
+    //    }
 
-    //TODO: Adjust to Laravel
-    public function createDemo(?string $tag = null) : User
+    public function createDemo(?string $tag = null): User
     {
-        if (is_null ($tag)) $tag = time();
+        if (is_null($tag)) {
+            $tag = time();
+        }
 
         $demoUser = new User();
 
-        $demoUser->login = 'demo-' . $tag . '@mthash.com';
-        $demoUser->name = 'Demo ' . $tag . '-User';
-        $demoUser->password =  password_hash (12345678, PASSWORD_BCRYPT);
-        $demoUser->is_demo = 1;
-        $demoUser->tag = $tag;
+        $demoUser->login    = 'demo-' . $tag . '@mthash.com';
+        $demoUser->name     = 'Demo ' . $tag . '-User';
+        $demoUser->password = password_hash(12345678, PASSWORD_BCRYPT);
+        $demoUser->is_demo  = 1;
+        $demoUser->tag      = $tag;
 
         $demoUser->save();
 
         return $demoUser;
-
-        /*
-         if (is_null ($tag)) $tag = time();
-
-        $data   = [
-            'login' => 'demo-' . $tag . '@mthash.com', 'name' => 'Demo ' . $tag . '-User', 'password' => password_hash (12345678, PASSWORD_BCRYPT), 'is_demo' => 1,
-            'tag'   => $tag,
-        ];
-        return $this->createEntity ($data);
-         */
     }
 
-    public function getWallet (?string $symbol = null) : Wallet
+    public function getWallet(?string $symbol = null): Wallet
     {
-        if (empty ($symbol)) $symbol = 'HASH';
+        if (empty ($symbol)) {
+            $symbol = 'HASH';
+        }
 
         return Wallet::where([
             ['status', '>', '0'],
             ['currency', '=', $symbol],
-            ['user_id', '=', $this->id]
+            ['user_id', '=', $this->id],
         ])->first();
+    }
+
+    public static function failFindFirst($parameters = null)
+    {
+        $entity = self::first($parameters);
+        if (!$entity) {
+            $message = 'Such ' . (new \ReflectionClass(static::class))->getShortName() . ' does not exists';
+            if (getenv('APP_ENV') != 'production') {
+                $message .= print_r($parameters, 1);
+            }
+            throw new BusinessLogicException($message);
+        }
+
+        return $entity;
     }
 
     public function wallets()
@@ -123,7 +139,7 @@ class User extends Authenticatable
 
     public function relayers()
     {
-        return $this->hasMany('App\Relayer');
+        return $this->hasMany(Relayer::class);
     }
 
     public function userAssets()

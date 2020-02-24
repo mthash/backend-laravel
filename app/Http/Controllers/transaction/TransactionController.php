@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Models\Asset\Asset;
 use App\Models\User\WalletRepository;
-use App\Transaction;
+use App\Models\Transaction\Transaction;
 use App\Models\User\User;
 use App\Models\User\Wallet;
 use Illuminate\Http\Request;

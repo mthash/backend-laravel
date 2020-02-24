@@ -9,8 +9,8 @@ namespace App\Models\Asset;
  */
 class CMC
 {
-    const   QUOTES_LATEST_URL           = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
-    const   API_KEY                     = '1bee11ab-efa6-43b2-9599-d349b2675949';
+    const   QUOTES_LATEST_URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
+    const   API_KEY           = '1bee11ab-efa6-43b2-9599-d349b2675949';
 
     private $response;
 
@@ -20,39 +20,40 @@ class CMC
      */
     public function __construct($assets)
     {
-//        dd($assets);
+        //        dd($assets);
         if (empty($assets)) {
-            return $assets;
+            throw new BusinessLogicException('There are not any assets');
         }
-        $symbols    = [];
-        foreach ($assets as $asset)
-        {
+        $params  = [];
+        $symbols = [];
+        foreach ($assets as $asset) {
             $symbols[] = $asset->symbol;
         }
 
-        $params['symbol']   = implode (',', $symbols);
-        $headers            =
+        $params['symbol'] = implode(',', $symbols);
+
+        $headers          =
             [
                 'Accepts: application/json',
-                'X-CMC_PRO_API_KEY: ' . self::API_KEY
+                'X-CMC_PRO_API_KEY: ' . self::API_KEY,
             ];
 
-        $request    = self::QUOTES_LATEST_URL . '?' . http_build_query ($params);
-        $handler    = curl_init();
+        $request = self::QUOTES_LATEST_URL . '?' . http_build_query($params);
+        $handler = curl_init();
 
-        curl_setopt_array ($handler, [
-            CURLOPT_URL             => $request,
-            CURLOPT_HTTPHEADER      => $headers,
-            CURLOPT_RETURNTRANSFER  => 1,
+        curl_setopt_array($handler, [
+            CURLOPT_URL            => $request,
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_RETURNTRANSFER => 1,
         ]);
 
-        $this->response   = curl_exec ($handler);
-        curl_close ($handler);
+        $this->response = curl_exec($handler);
+        curl_close($handler);
     }
 
     public function getResponse()
     {
-        return json_decode ($this->response);
+        return json_decode($this->response);
     }
 
 }

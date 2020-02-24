@@ -8,7 +8,7 @@ use App\Models\Historical\HistoryWallet;
 use App\Models\Historical\HistoryAsset;
 use App\Models\Historical\HistoryDailyRevenue;
 use App\Models\Mining\Contract;
-use App\Relayer;
+use App\Models\Mining\Relayer;
 use App\Models\Repositories\AssetRepository;
 use App\Models\User\Wallet;
 use DB;
@@ -35,7 +35,7 @@ class HistoryTask extends Command
      *
      * @var string
      */
-    protected $signature = 'hash:watch';
+    protected $signature = 'hash:history:watch';
 
     /**
      * The console command description.
@@ -138,7 +138,7 @@ class HistoryTask extends Command
         //            ]
         //        );
 
-        //todo: fix the quert
+        //todo: fix the query
         $contracts = Relayer::where('status', '>', 0)
             ->groupBy('asset_id', 'user_id', 'id')
             ->orderBy('id', 'DESC')

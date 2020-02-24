@@ -5,7 +5,6 @@ namespace App\Models\Repositories;
 use App\Models\Asset\Asset;
 use App\Models\Mining\HASHContract;
 
-//TODO: Do we need this class? There is an original in Models/Asset/AssetRepository
 /**
  * Class AssetRespository
  *

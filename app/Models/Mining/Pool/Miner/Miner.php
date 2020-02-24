@@ -9,6 +9,7 @@ use App\Models\Mining\Block;
 
 class Miner extends Model
 {
+    public const SLUSH = 2;
     /**
      * The table associated with the model.
      *
@@ -17,7 +18,6 @@ class Miner extends Model
     protected $table = 'miner';
 
     protected $fillable = [
-        //'*',
         'id', 'pool_id', 'algo_id', 'max_hashrate'
     ];
 

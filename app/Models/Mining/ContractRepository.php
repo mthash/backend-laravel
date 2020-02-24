@@ -6,7 +6,6 @@ use App\Models\Asset\Asset;
 use App\Models\User\User;
 use DB;
 
-//TODO need to convert to Laravel
 class ContractRepository
 {
     static public function getUserInvestmentsPerAsset (User $user)

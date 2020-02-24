@@ -22,9 +22,7 @@ class Wallet extends Model
      */
     protected $table = 'wallet';
 
-    //todo: add fields
     protected $fillable = [
-        //'*'
         'id', 'asset_id', 'address', 'public_key', 'private_key', 'user_id', 'currency', 'balance', 'name'
     ];
 

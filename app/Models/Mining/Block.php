@@ -11,14 +11,29 @@ use App\Models\Mining\Widget\MyRewardsDTO;
 use App\Models\Mining\Pool\Pool;
 use App\Models\Mining\Contract;
 use Illuminate\Support\Facades\DB;
+use App\Models\Mining\Relayer;
+use App\Models\Transaction\Transaction;
 
 
+/**
+ * Class Block
+ * @package App\Models\Mining
+ */
 class Block extends Model
 {
+    /**
+     * @var string
+     */
     protected $dateFormat = 'U';
 
     //    public $timestamps = false;
+    /**
+     *
+     */
     const CREATED_AT = 'created_at';
+    /**
+     *
+     */
     const UPDATED_AT = null;
 
     /**
@@ -28,9 +43,18 @@ class Block extends Model
      */
     protected $table = 'block';
 
-    public function generate(Miner $miner, Asset $asset): Block
+    protected $fillable = [
+        'asset_id', 'miner_id', 'pool_id', 'hash', 'reward', 'status'
+    ];
+
+    /**
+     * @param Miner $miner
+     * @param Asset $asset
+     * @return $this
+     */
+    public function generate(Miner $miner, Asset $asset): self
     {
-        $this->save(
+        $this->create(
             [
                 'asset_id' => $asset->id,
                 'miner_id' => $miner->id,
@@ -43,17 +67,29 @@ class Block extends Model
         return $this;
     }
 
-    private function getBlockReward(Asset $asset)
-    {
-        return $asset->block_reward_amount;
-    }
-
+    /**
+     * @return string
+     */
     private function getBlockHash()
     {
         return hash('SHA256', microtime(true));
     }
 
-    static public function getRewardsWidget(?array $filter = null): array
+    /**
+     * @param Asset $asset
+     * @return mixed
+     */
+    private function getBlockReward(Asset $asset)
+    {
+        return $asset->block_reward_amount;
+    }
+
+    /**
+     * @param array|null $filter
+     * @return array
+     * @throws \App\Exceptions\BusinessLogicException
+     */
+    public static function getRewardsWidget(?array $filter = null): array
     {
         //TODO:: Replace with Laravel
         $request = 'status > 0';
@@ -84,38 +120,60 @@ class Block extends Model
         return $response;
     }
 
+    /**
+     * @param User $user
+     * @return array
+     */
     static public function myRewardsWidget(User $user): array
     {
         return (new MyRewardsDTO($user))->fetch();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function contracts()
     {
         return $this->hasMany(Contract::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function asset()
     {
         return $this->belongsTo('App\Models\Asset\Asset', 'asset_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function miner()
     {
         return $this->belongsTo(Miner::class, 'miner_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function pool()
     {
         return $this->belongsTo(Pool::class, 'pool_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function relayers()
     {
-        return $this->hasMany('App\Relayer');
+        return $this->hasMany(Relayer::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function transactions()
     {
-        return $this->hasMany('App\Transaction');
+        return $this->hasMany(Transaction::class);
     }
 }

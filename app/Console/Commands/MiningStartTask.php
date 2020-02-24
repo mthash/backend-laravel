@@ -4,13 +4,14 @@ namespace App\Console\Commands;
 
 use App\Models\Asset\Algo;
 use App\Models\Asset\Asset;
+use App\Models\Asset\Units;
 use App\Models\Mining\Block;
 use App\Models\Mining\Distributor;
 use App\Models\Mining\Pool\Pool;
-use App\Relayer;
+use App\Models\Mining\Relayer;
 use App\Models\Repositories\AssetRepository;
 use Illuminate\Console\Command;
-
+use App\SlushPool;
 /* CURRENT cron jobs running in Digitalocean
 EXPLANATIONS:
 Scheduled tasks are run via cron. There are 3 tasks at the moment:
@@ -60,6 +61,9 @@ class MiningStartTask extends Command
      */
     public function handle()
     {
+        try {
+
+
         /**
          * @var $assets Asset[]
          */
@@ -68,14 +72,23 @@ class MiningStartTask extends Command
 //                'status > 0 and mineable = 1 and can_mine = 1',
 //            ]
 //        );
+
+        //TODO: add error handling and transactions
+        $poolData = SlushPool::getPoolStats();
+//dd($poolData->btc->pool_scoring_hash_rate);
+//dd(Units::toHashPerSecondLongFormat($poolData->btc->pool_scoring_hash_rate, $poolData->btc->hash_rate_unit));
         $assets = Asset::where([
             ['status', '>', 0],
             ['mineable', 1],
             ['can_mine', 1]
         ])->get();
-//    dd($assets->count());
+
         if ($assets->count() > 0) {
             foreach ($assets as $asset) {
+                if ($asset->symbol != 'BTC') {
+                    continue;
+                }
+
                 /**
                  * @var $lastBlock \Block
                  */
@@ -98,15 +111,16 @@ class MiningStartTask extends Command
                 )
                 ->orderBy('id', 'DESC')
                 ->first();
-//                dd($lastBlock->first()->created_at);
+//                dd($asset->id, $lastBlock);
                 echo $asset->symbol ."\n";
 
                 if ($lastBlock && $lastBlock->count() > 0) {
                     //dd(time(), $lastBlock->created_at->timestamp);
-                    //echo 'Date: ' . $lastBlock->created_at ."\n";
-                    $difference = time() - $lastBlock->created_at->timestamp;
 
-                    if (getenv('IS_PRODUCTION') != 0 && $difference < $asset->block_generation_time) {
+                    $difference = time() - $lastBlock->created_at->timestamp;
+                    echo 'Date: ' . $lastBlock->created_at ."\n";
+                    echo 'Difference: ' . $difference ."\n";
+                    if ($difference < $asset->block_generation_time) {//getenv('IS_PRODUCTION') != 0 &&
                         continue;
                     }
                 }
@@ -114,15 +128,19 @@ class MiningStartTask extends Command
                 /**
                  * @var Pool $pool
                  */
-                $pool = Pool::find(1);
-                $pool->mine($asset);
+                $pool = Pool::find(Pool::SHA256);
+                $pool->mine($asset, $poolData);
 
+                //todo: get from contracts table
                 Relayer::recalculateForAsset($asset);
 
                 $distributor = new Distributor();
                 $distributor->distributeRewards($asset);
 
             }
+        }
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 

@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Asset\Algo;
 use App\Models\Asset\Asset;
 use App\Models\Mining\Pool\Pool;
-use App\Relayer;
+use App\Models\Mining\Relayer;
 use App\Models\Repositories\AssetRepository;
 use Illuminate\Console\Command;
 

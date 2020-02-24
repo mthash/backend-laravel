@@ -10,8 +10,8 @@ use App\Models\Asset\Eth\Address;
 use App\Models\Mining\HASHContract;
 use App\Models\User\Wallet;
 use App\Models\Mining\Pool\Pool;
-use App\Relayer;
-use App\Transaction;
+use App\Models\Mining\Relayer;
+use App\Models\Transaction\Transaction;
 use App\Models\User\User;
 use Illuminate\Console\Command;
 

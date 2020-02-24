@@ -6,8 +6,9 @@ use App\Models\Asset\Asset;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\BusinessLogicException;
 use App\Models\User\User;
-use App\Relayer;
+use App\Models\Mining\Relayer;
 use App\Models\User\Wallet;
+use Illuminate\Support\Facades\Artisan;
 
 class HASHContract extends Model implements ContractInterface
 {
@@ -80,8 +81,8 @@ class HASHContract extends Model implements ContractInterface
 
             Relayer::recalculateForAsset($asset);
 
-            //TODO: Move to Laravel
             //(new \HistoryTask())->watchAction();
+            Artisan::call('hash:history:watch');
 
             return $contract;
         }
@@ -113,8 +114,8 @@ class HASHContract extends Model implements ContractInterface
 
             Relayer::recalculateForAsset($asset);
 
-            //TODO:: Move to Laravel
             //(new \HistoryTask())->watchAction();
+            Artisan::call('hash:history:watch');
 
             return $this;
         }

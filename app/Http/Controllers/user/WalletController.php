@@ -19,7 +19,6 @@ class WalletController extends Controller
         // Temporary
         if ($wallets->count() == 0)
         {
-            //TODO: Test creating new wallet
             (new Wallet())->createFor($user);
             $wallets    = $wallets = WalletRepository::byUser($user);
         }

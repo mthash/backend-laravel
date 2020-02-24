@@ -47,7 +47,7 @@ class WidgetController extends Controller
 
     public function deleteAsset (string $asset)
     {
-        //TODO: Make it work with Laravel
+        //TODO: Make it work with Laravel, it is not un use
         /*$asset      = \App\Model\User\AssetRepository::find ($this->getUser(), AssetRepository::bySymbol($asset));
         $asset->makeInvisible();
 

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models\Asset;
+
 use App\Models\Mining\HASHContract;
 
 class AssetRepository
@@ -8,14 +10,13 @@ class AssetRepository
      * @param Asset $asset
      * @return HASHContract[]
      */
-    static public function getInvestorsContracts (Asset $asset)
+    static public function getInvestorsContracts(Asset $asset)
     {
-        return HASHContract::where (
+        return HASHContract::where(
             [
                 ['status', '>', 0],
-                ['asset_id', $asset->id]
-            ]
-        )
+                ['asset_id', $asset->id],
+            ])
             ->groupBy('user_id', 'id')
             ->get();
     }
@@ -57,7 +58,7 @@ class AssetRepository
         ])->get();
     }
 
-    static public function allSymbols() : array
+    static public function allSymbols(): array
     {
         return Asset::where([
             ['status', '>', '0'],

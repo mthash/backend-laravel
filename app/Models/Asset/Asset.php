@@ -9,6 +9,7 @@ use App\Models\Dashboard\Overview;
 use App\Models\Mining\Pool\Pool;
 use App\Models\Mining\Block;
 use App\Models\Mining\Contract;
+use App\Models\Mining\Relayer;
 
 class Asset extends Model
 {
@@ -21,9 +22,7 @@ class Asset extends Model
      */
     protected $table = 'asset';
 
-    //todo: add fields
     protected $fillable = [
-        //'*',
         'id', 'algo_id', 'cmc_id', 'logo_url', 'symbol', 'name', 'mineable', 'can_mine', 'total_hashrate', 'hash_invested', 'price_usd', 'block_generation_time', 'block_reward_amount', 'shares', 'last_block_id'
     ];
 
@@ -69,7 +68,7 @@ class Asset extends Model
 
     public function relayers()
     {
-        return $this->hasMany('App\Relayer');
+        return $this->hasMany(Relayer::class);
     }
 
     public function userAssets()

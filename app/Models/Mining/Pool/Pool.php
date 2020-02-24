@@ -13,6 +13,9 @@ use App\Models\Mining\Contract;
 
 class Pool extends Model
 {
+
+    public const SHA256 = 1;
+
     /**
      * The table associated with the model.
      *
@@ -27,13 +30,13 @@ class Pool extends Model
         'id', 'name', 'asset_id', 'miners_count', 'total_hashrate', 'used_power'
     ];
 
-    public function mine (Asset $asset)
+    public function mine (Asset $asset, $poolData)
     {
         $block      = new Block();
-        $block->generate (Miner::find(1), $asset);
+        $block->generate (Miner::find(Miner::SLUSH), $asset);
 
         $asset->last_block_id   = $block->id;
-        $asset->total_hashrate  = $this->total_hashrate; // @todo Change this when we will have multiple pools
+        $asset->total_hashrate  = Units::toHashPerSecondLongFormat($poolData->btc->pool_scoring_hash_rate, $poolData->btc->hash_rate_unit); // @todo Change this when we will have multiple pools
         $asset->save();
 
         return $block;

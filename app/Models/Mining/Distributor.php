@@ -1,6 +1,7 @@
 <?php
 namespace App\Models\Mining;
 
+use App\Models\Mining\Relayer;
 use DateTime;
 use App\Models\Asset\Asset;
 use App\Models\Transaction\Transaction;
@@ -30,7 +31,7 @@ class Distributor
         $investedHashrates  = Relayer::byUser ($user, $asset);
         $currentHashrate    = $shares = 0;
 
-        for ($i = 0; $i < count ($investedHashrates); $i++)
+        for ($i = 0, $iMax = count($investedHashrates); $i < $iMax; $i++)
         {
             $currentHashrate+= $investedHashrates[$i]->hashrate;
 
@@ -47,22 +48,20 @@ class Distributor
 
     public function distributeRewards (Asset $asset)
     {
+
         $assetShares    = $this->calculateSharesForAsset($asset);
         $percent        = [];
         $totalShares    = $assetShares->getTotalShares();
 
         foreach ($assetShares->getUsers() as $userId => $shares)
         {
-            if ($shares == 0) continue;
+            if ($shares == 0) {
+                continue;
+            }
             $percent[$userId]   = $shares * 100 / $totalShares;
             $rewardsInToken     = $percent[$userId] * $asset->block_reward_amount / 100;
 
-            $wallet = WalletRepository::byUserWithAsset(
-                User::failFindFirst ($userId), $asset
-            );
-
-
-
+            $wallet = WalletRepository::byUserWithAsset(User::failFindFirst ($userId), $asset);
             $transaction    = new Transaction();
             $transaction->freeDeposit($asset, $wallet, $rewardsInToken, Type::MINING, $asset->last_block_id, $percent[$userId]);
 

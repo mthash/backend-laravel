@@ -2,8 +2,8 @@
 
 namespace App\Models\Mining\Widget;
 
-use App\TransactionType;
-use App\Transaction;
+use App\Models\Transaction\TransactionType;
+use App\Models\Transaction\Transaction;
 use App\Models\User\User;
 
 class MyRewardsDTO
