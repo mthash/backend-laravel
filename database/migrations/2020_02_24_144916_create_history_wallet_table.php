@@ -15,8 +15,20 @@ class CreateHistoryWalletTable extends Migration {
 		Schema::create('history_wallet', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('user_id')->nullable()->index('USR_ID');
-			$table->integer('wallet_id')->nullable()->index('WLT_ID');
+			$table->unsignedBigInteger('user_id');//->nullable()->index('USR_ID');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+			$table->unsignedBigInteger('wallet_id');//->nullable()->index('WLT_ID');
+            $table->foreign('wallet_id')
+                ->references('id')
+                ->on('wallet')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 			$table->decimal('balance', 20, 8)->nullable();
 			$table->integer('created_at')->nullable();
 			$table->boolean('status')->default(1)->index('STS');

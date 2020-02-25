@@ -14,9 +14,22 @@ class CreateWalletTable extends Migration {
 	{
 		Schema::create('wallet', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('asset_id')->nullable();
-			$table->integer('user_id')->nullable();
+			$table->bigIncrements('id');
+
+			$table->unsignedBigInteger('asset_id');//->nullable();
+            $table->foreign('asset_id')
+                ->references('id')
+                ->on('asset')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+			$table->unsignedBigInteger('user_id');//->nullable();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 			$table->string('address')->nullable();
 			$table->string('public_key')->nullable();
 			$table->string('private_key')->nullable();

@@ -14,9 +14,14 @@ class CreateAlgoTable extends Migration {
 	{
 		Schema::create('algo', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->bigIncrements('id');
 			$table->string('name', 64)->nullable();
-			$table->integer('pool_id')->nullable();
+			$table->unsignedBigInteger('pool_id');//->nullable();
+            $table->foreign('pool_id')
+                ->references('id')
+                ->on('pool')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 			$table->boolean('status')->default(1);
 		});
 	}

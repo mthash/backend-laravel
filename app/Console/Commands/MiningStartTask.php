@@ -62,21 +62,9 @@ class MiningStartTask extends Command
     public function handle()
     {
         try {
-
-
-        /**
-         * @var $assets Asset[]
-         */
-//        $assets = Asset::find(
-//            [
-//                'status > 0 and mineable = 1 and can_mine = 1',
-//            ]
-//        );
-
         //TODO: add error handling and transactions
         $poolData = SlushPool::getPoolStats();
-//dd($poolData->btc->pool_scoring_hash_rate);
-//dd(Units::toHashPerSecondLongFormat($poolData->btc->pool_scoring_hash_rate, $poolData->btc->hash_rate_unit));
+
         $assets = Asset::where([
             ['status', '>', 0],
             ['mineable', 1],
@@ -89,17 +77,6 @@ class MiningStartTask extends Command
                     continue;
                 }
 
-                /**
-                 * @var $lastBlock \Block
-                 */
-//                $lastBlock = Block::findFirst(
-//                    [
-//                        'asset_id = ?0 and status > 0',
-//                        'bind'  => [$asset->id],
-//                        'order' => 'id DESC',
-//                    ]
-//                );
-//dd('a', $asset->id);
                 /**
                  * @var $lastBlock \Block
                  */

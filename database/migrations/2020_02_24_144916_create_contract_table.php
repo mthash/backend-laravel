@@ -14,12 +14,43 @@ class CreateContractTable extends Migration {
 	{
 		Schema::create('contract', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('user_id')->nullable();
-			$table->integer('wallet_id')->nullable();
-			$table->integer('asset_id')->nullable();
-			$table->integer('block_id')->nullable();
-			$table->integer('pool_id')->nullable();
+			$table->bigIncrements('id');
+
+			$table->unsignedBigInteger('user_id');//->nullable();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+			$table->unsignedBigInteger('wallet_id');//->nullable();
+            $table->foreign('wallet_id')
+                ->references('id')
+                ->on('wallet')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+			$table->unsignedBigInteger('asset_id');//->nullable();
+            $table->foreign('asset_id')
+                ->references('id')
+                ->on('asset')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+			$table->unsignedBigInteger('block_id');//>nullable();
+            $table->foreign('block_id')
+                ->references('id')
+                ->on('block')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+			$table->unsignedBigInteger('pool_id');//->nullable();
+            $table->foreign('pool_id')
+                ->references('id')
+                ->on('pool')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 			$table->decimal('amount', 20, 8)->nullable();
 			$table->bigInteger('hashrate')->nullable();
 			$table->integer('created_at')->nullable();

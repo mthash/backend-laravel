@@ -25,7 +25,7 @@ class MinerTableSeeder extends Seeder
                 'algo_id' => 1,
                 'id' => 2,
                 'max_hashrate' => 10000000000000000000,
-                'pool_id' => 6,
+                'pool_id' => 5,
             ),
         ));
 

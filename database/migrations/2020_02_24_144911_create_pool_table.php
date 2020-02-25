@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateMiningPoolTable extends Migration {
+class CreatePoolTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,11 +12,11 @@ class CreateMiningPoolTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('mining_pool', function(Blueprint $table)
+		Schema::create('pool', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->bigIncrements('id');
 			$table->string('name', 128)->nullable();
-			$table->integer('asset_id')->nullable();
+			//$table->integer('asset_id')->nullable();
 			$table->integer('miners_count')->nullable();
 			$table->bigInteger('total_hashrate')->nullable();
 			$table->bigInteger('used_power')->nullable();
@@ -31,7 +31,7 @@ class CreateMiningPoolTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('mining_pool');
+		Schema::drop('pool');
 	}
 
 }

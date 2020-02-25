@@ -15,9 +15,27 @@ class CreateRelayerTable extends Migration {
 		Schema::create('relayer', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('block_id')->nullable();
-			$table->integer('user_id')->nullable();
-			$table->integer('asset_id')->nullable();
+			$table->unsignedBigInteger('block_id');//->nullable();
+            $table->foreign('block_id')
+                ->references('id')
+                ->on('block')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+			$table->unsignedBigInteger('user_id');//->nullable();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+			$table->unsignedBigInteger('asset_id');//->nullable();
+            $table->foreign('asset_id')
+                ->references('id')
+                ->on('asset')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 			$table->bigInteger('hashrate')->nullable();
 			$table->integer('created_at')->nullable();
 			$table->integer('status')->default(1);

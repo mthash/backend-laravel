@@ -15,7 +15,13 @@ class CreateOverviewTable extends Migration {
 		Schema::create('overview', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('asset_id')->nullable()->index('asset_id');
+			$table->unsignedBigInteger('asset_id');//->nullable()->index('asset_id');
+            $table->foreign('asset_id')
+                ->references('id')
+                ->on('asset')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 			$table->decimal('daily_revenue', 16, 3)->nullable();
 		});
 	}

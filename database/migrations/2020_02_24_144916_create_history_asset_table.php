@@ -15,7 +15,13 @@ class CreateHistoryAssetTable extends Migration {
 		Schema::create('history_asset', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('asset_id')->nullable()->index('AST_ID');
+			$table->unsignedBigInteger('asset_id');//->nullable()->index('AST_ID');
+            $table->foreign('asset_id')
+                ->references('id')
+                ->on('asset')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 			$table->integer('tokens_invested')->nullable();
 			$table->bigInteger('hashrate')->nullable();
 			$table->bigInteger('total_hashrate')->nullable();

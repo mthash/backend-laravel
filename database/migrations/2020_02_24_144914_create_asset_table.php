@@ -14,8 +14,14 @@ class CreateAssetTable extends Migration {
 	{
 		Schema::create('asset', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('algo_id')->nullable();
+			$table->bigIncrements('id');
+			$table->unsignedBigInteger('algo_id');//->nullable();
+            $table->foreign('algo_id')
+                ->references('id')
+                ->on('algo')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 			$table->integer('cmc_id')->nullable();
 			$table->string('logo_url')->nullable();
 			$table->char('symbol', 8)->nullable();

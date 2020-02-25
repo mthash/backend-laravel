@@ -12,11 +12,6 @@ class UserAssetTableSeeder extends Seeder
      */
     public function run()
     {
-        
-
         \DB::table('user_asset')->delete();
-        
-        
-        
     }
 }

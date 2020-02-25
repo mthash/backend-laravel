@@ -15,8 +15,19 @@ class CreateUserAssetTable extends Migration {
 		Schema::create('user_asset', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('asset_id')->nullable();
-			$table->integer('user_id')->nullable();
+			$table->unsignedBigInteger('asset_id');//->nullable();
+            $table->foreign('asset_id')
+                ->references('id')
+                ->on('asset')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+			$table->unsignedBigInteger('user_id');//->nullable();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 			$table->integer('created_at')->nullable();
 			$table->integer('updated_at')->nullable();
 			$table->integer('deleted_at')->nullable();
