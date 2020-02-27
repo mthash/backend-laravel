@@ -31,13 +31,13 @@ class AssetRepository
 
     static public function getInvestorsInvestment(Asset $asset)
     {
-        $result = \DB::select('
-            SELECT `user_id`, SUM(`amount`) as `hash_invested`
-            FROM `contract`
-            WHERE `status` > 0 and `asset_id` = ' . $asset->id . '
-            GROUP by `user_id`
-            HAVING SUM(`amount`) > 0
-        ');
+        $result = \DB::select("
+            SELECT user_id, SUM(amount) as hash_invested
+            FROM contract
+            WHERE status > '0' and asset_id = " . $asset->id . "
+            GROUP by user_id
+            HAVING SUM(amount) > 0
+        ");
 
         return $result;
     }

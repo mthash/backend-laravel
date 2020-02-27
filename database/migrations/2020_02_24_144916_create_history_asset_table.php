@@ -26,7 +26,7 @@ class CreateHistoryAssetTable extends Migration {
 			$table->bigInteger('hashrate')->nullable();
 			$table->bigInteger('total_hashrate')->nullable();
 			$table->integer('created_at')->nullable();
-			$table->boolean('status')->default(1)->index('STS');
+			$table->boolean('status')->default(1)->index('history_asset_sts_index');
 		});
 	}
 

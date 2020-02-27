@@ -32,7 +32,7 @@ class CreateHistoryDailyRevenueTable extends Migration {
 			$table->decimal('revenue', 20, 8)->nullable();
 			$table->decimal('amount', 20, 8)->nullable();
 			$table->integer('created_at')->nullable();
-			$table->boolean('status')->default(1)->index('STS');
+			$table->boolean('status')->default(1)->index('history_daily_revenue_sts_index');
 		});
 	}
 

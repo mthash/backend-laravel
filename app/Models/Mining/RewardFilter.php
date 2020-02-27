@@ -30,6 +30,7 @@ class RewardFilter
 //        $params[] = time() - 3600;
         $postRequest.= ' and created_at > ' . (time() - 3600);
 
+        //$this->request  = $request . $postRequest;
         $this->request  = $request . $postRequest;
         $this->bind     = $params;
     }

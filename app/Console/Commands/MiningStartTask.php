@@ -64,7 +64,7 @@ class MiningStartTask extends Command
         try {
         //TODO: add error handling and transactions
         $poolData = SlushPool::getPoolStats();
-
+//dd($poolData);
         $assets = Asset::where([
             ['status', '>', 0],
             ['mineable', 1],

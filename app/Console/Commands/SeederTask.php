@@ -97,7 +97,7 @@ class SeederTask extends Command
 
     private function truncate(\Phalcon\Mvc\Model $model): void
     {
-        $this->getDI()->get('db')->query('TRUNCATE TABLE `' . $model->getSource() . '`');
+        $this->getDI()->get('db')->query('TRUNCATE TABLE ' . $model->getSource() . '');
     }
 
     public function restartAction()
@@ -202,7 +202,7 @@ class SeederTask extends Command
             $address             = Address::generate();
             $wallet              = new Wallet();
             $wallet->asset_id    = $asset->id;
-            $wallet->user_id     = -1;
+            $wallet->user_id     = 1;
             $wallet->address     = $address['address'];
             $wallet->public_key  = $address['public'];
             $wallet->private_key = $address['private'];

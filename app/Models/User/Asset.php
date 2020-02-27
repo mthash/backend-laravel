@@ -52,10 +52,10 @@ class Asset extends Model
     static public function calculateRevenue (User $user, AssetAsset $asset) : ?float
     {
         $results = \DB::select('
-            SELECT SUM(`amount`) AS `revenue`
-            FROM `transaction`
-            WHERE `type_id` = 2 AND `from_user_id` = -1 and `created_at` > ' . strtotime ('-1 hour') . '
-            AND `to_user_id` = ' . $user->id . ' AND `currency` = "' . $asset->symbol . '"
+            SELECT SUM(amount) AS revenue
+            FROM transaction
+            WHERE type_id = 2 AND from_user_id = 1 and created_at > ' . strtotime ('-1 hour') . '
+            AND to_user_id = ' . $user->id . ' AND currency = "' . $asset->symbol . '"
         ');
         return $results[0]->revenue;
     }

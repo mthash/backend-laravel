@@ -92,7 +92,7 @@ class Block extends Model
     public static function getRewardsWidget(?array $filter = null): array
     {
         //TODO:: Replace with Laravel
-        $request = 'status > 0';
+        $request = "status > '0'";
         if (empty ($filter)) {
             $filter = [];
         }
@@ -111,6 +111,8 @@ class Block extends Model
         $blocks =  DB::select('
             SELECT * from block where ' . $prepared->getRequest() . ' order by id DESC limit 20
         ');
+
+//        $blocks = Block::where('status', '>', 0)->whereRaw($prepared->getRequest())->get();
 
         $response = [];
         foreach ($blocks as $block) {

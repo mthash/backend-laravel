@@ -31,7 +31,7 @@ class CreateHistoryWalletTable extends Migration {
 
 			$table->decimal('balance', 20, 8)->nullable();
 			$table->integer('created_at')->nullable();
-			$table->boolean('status')->default(1)->index('STS');
+			$table->boolean('status')->default(1)->index('wallet_sts_index');
 		});
 	}
 

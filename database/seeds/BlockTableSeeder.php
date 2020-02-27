@@ -12,8 +12,6 @@ class BlockTableSeeder extends Seeder
      */
     public function run()
     {
-
-
         \DB::table('block')->delete();
 
 //        \DB::table('block')->insert(array (

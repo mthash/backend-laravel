@@ -48,7 +48,7 @@ class AlgoTableSeeder extends Seeder
                     'id'      => 5,
                     'name'    => 'Ouroboros',
                     'pool_id' => 3,
-                    'status'  => -1,
+                    'status'  => 0,
                 ),
         ));
 

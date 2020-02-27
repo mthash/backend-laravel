@@ -35,7 +35,7 @@ class CreateHistoryArcadeTable extends Migration {
 			$table->integer('hash_invested')->nullable();
 			$table->decimal('balance', 20, 8)->nullable();
 			$table->integer('created_at')->nullable();
-			$table->boolean('status')->default(1)->index('STS');
+			$table->boolean('status')->default(1)->index('history_arcade_sts_index');
 		});
 	}
 

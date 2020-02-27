@@ -6,7 +6,7 @@ use App\Models\User\User;
 use Illuminate\Http\Request;
 use App\Exceptions\BusinessLogicException;
 use App\Http\Controllers\Controller as Controller;
-use App\Jwt;
+use App\Models\User\Jwt;
 
 class AuthController extends Controller
 {

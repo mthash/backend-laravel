@@ -89,18 +89,18 @@ class HistoryTask extends Command
     private function watchDailyRevenue()
     {
         //        $todayRevenue   = \Phalcon\Di::getDefault()->get('db')->query ('
-        //            SELECT `to_user_id` as `user_id`, `currency`, SUM(`amount`) as `amount`, (SELECT `price_usd` FROM `asset` WHERE `symbol` = `currency`) as `price_usd`
-        //            FROM `transaction`
-        //            WHERE `type_id` = 2 AND `from_user_id` = -1 and (`created_at` >= ' . strtotime ('today 00:00:00') . ' AND `created_at` <= ' . strtotime ('today 23:59:59') . ')
-        //            GROUP by `currency`
+        //            SELECT to_user_id as user_id, currency, SUM(amount) as amount, (SELECT price_usd FROM asset WHERE symbol = currency) as price_usd
+        //            FROM transaction
+        //            WHERE type_id = 2 AND from_user_id = -1 and (created_at >= ' . strtotime ('today 00:00:00') . ' AND created_at <= ' . strtotime ('today 23:59:59') . ')
+        //            GROUP by currency
         //        ')->fetchAll (\PDO::FETCH_ASSOC);
 
         //todo: check the group by clause
         $todayRevenue = DB::select('
-            SELECT `to_user_id` as `user_id`, `currency`, SUM(`amount`) as `amount`, (SELECT `price_usd` FROM `asset` WHERE `symbol` = `currency`) as `price_usd`
-            FROM `transaction`
-            WHERE `type_id` = 2 AND `from_user_id` = -1 and (`created_at` >= ' . strtotime('today 00:00:00') . ' AND `created_at` <= ' . strtotime('today 23:59:59') . ')
-            GROUP by `currency`, `to_user_id`
+            SELECT to_user_id as user_id, currency, SUM(amount) as amount, (SELECT price_usd FROM asset WHERE symbol = currency) as price_usd
+            FROM transaction
+            WHERE type_id = 2 AND from_user_id = 1 and (created_at >= ' . strtotime('today 00:00:00') . ' AND created_at <= ' . strtotime('today 23:59:59') . ')
+            GROUP by currency, to_user_id
         ');
 
         foreach ($todayRevenue as $item) {

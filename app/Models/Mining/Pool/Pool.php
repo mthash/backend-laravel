@@ -21,7 +21,7 @@ class Pool extends Model
      *
      * @var string
      */
-    protected $table = 'mining_pool';
+    protected $table = 'pool';
 
     public $timestamps = false;
 

@@ -39,7 +39,7 @@ class CreateBlockTable extends Migration {
 			$table->string('hash')->nullable()->index('HSH');
 			$table->decimal('reward', 20, 8)->nullable();
 			$table->integer('created_at')->nullable()->index('CREATED');
-			$table->boolean('status')->default(1)->index('STS');
+			$table->boolean('status')->default(1)->index('block_sts_index');
 		});
 	}
 

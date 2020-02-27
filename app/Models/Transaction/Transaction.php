@@ -36,7 +36,7 @@ class Transaction extends Model
             $transaction = new Transaction();
             $transaction->wallet_from_id = $from->id;
             $transaction->wallet_to_id = $to->id;
-            $transaction->from_user_id = -1;
+            $transaction->from_user_id = 1;
             $transaction->to_user_id = $to->user_id;
             $transaction->amount = $amount;
             $transaction->currency = $from->currency;

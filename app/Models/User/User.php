@@ -64,8 +64,9 @@ class User extends Authenticatable
     public static function getCurrent()
     {
         $token = request()->header(Jwt::HEADER);
-
+//dd($token,  request()->header());
         if (empty ($token)) {
+            dd('empty token', token);
             throw new TokenException('Authorization Token is empty');
         }
 

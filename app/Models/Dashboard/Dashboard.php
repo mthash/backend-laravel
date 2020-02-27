@@ -31,7 +31,7 @@ class Dashboard
     {
         if (!empty ($assetId)) $asset  = Asset::findOrFail($assetId);
 
-        $power  = empty ($asset) ? \DB::select('SELECT SUM(`used_power`) as power FROM `mining_pool`') : $asset->algo->pool->used_power;
+        $power  = empty ($asset) ? \DB::select('SELECT SUM(used_power) as power FROM pool') : $asset->algo->pool->used_power;
 
         if(is_array($power)){
             $power = $power[0]->power;
@@ -47,10 +47,10 @@ class Dashboard
     {
         /*$request    = !empty ($assetId) ? ' AND currency = "' . Asset::failFindFirst($assetId)->symbol . '"': '';
         $todayRevenue   = \Phalcon\Di::getDefault()->get('db')->query ('
-            SELECT `currency`, SUM(`amount`) as `amount`, (SELECT `price_usd` FROM `asset` WHERE `symbol` = `currency`) as `price_usd`
-            FROM `transaction`
-            WHERE `type_id` = 2 AND `from_user_id` = -1 and (`created_at` >= ' . strtotime ('today 00:00:00') . ' AND `created_at` <= ' . strtotime ('today 23:59:59') . ') ' . $request . '
-            GROUP by `currency`
+            SELECT currency, SUM(amount) as amount, (SELECT price_usd FROM asset WHERE symbol = currency) as price_usd
+            FROM transaction
+            WHERE type_id = 2 AND from_user_id = -1 and (created_at >= ' . strtotime ('today 00:00:00') . ' AND created_at <= ' . strtotime ('today 23:59:59') . ') ' . $request . '
+            GROUP by currency
         ')->fetchAll (\PDO::FETCH_ASSOC);
 
         $revenue    = 0;
